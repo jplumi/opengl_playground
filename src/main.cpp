@@ -1,10 +1,26 @@
-#include <cstdint>
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Assets.hpp"
 #include "Settings.hpp"
 #include "Shader.hpp"
+#include "VertexBuffer.hpp"
+#include "IndexBuffer.hpp"
+
+void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+static void GLClearError()
+{
+    while(glGetError() != GL_NO_ERROR);
+}
+
+static void GLCheckError()
+{
+    while(GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL Error]: " << error << '\n';
+    }
+}
 
 WindowSettings windowSettings;
 
@@ -42,10 +58,12 @@ int main()
 
     glViewport(0, 0, windowSettings.width, windowSettings.height);
 
+    glfwSetKeyCallback(window, glfwKeyCallback);
+
     // ====== SHADER
 
     Assets::Init();
-    Shader* baseShader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
+    Shader baseShader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
 
     // ====== BUFFERS
     float vertices[] = {
@@ -54,22 +72,19 @@ int main()
         -0.5f, -0.5f,  // bottom left
         -0.5f,  0.5f   // top left 
     };
-    uint32_t indices[] = {
+    unsigned int indices[] = {
         0, 1, 3,
         1, 2, 3
     };
 
-    uint32_t VAO, VBO, EBO;
+    unsigned int VAO;
     glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    VertexBuffer vb(vertices, sizeof(vertices));
+
+    IndexBuffer ib(indices, sizeof(indices));
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -81,14 +96,24 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        baseShader->Use();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        baseShader.Use();
+        ib.Bind();
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
     }
 
+    Assets::Clear();
     glfwDestroyWindow(window);
     glfwTerminate();
+}
+
+void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
 }
 

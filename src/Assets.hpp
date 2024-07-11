@@ -8,10 +8,10 @@ class Assets
 {
 public:
     static void Init();
-    static Shader* LoadShader(const std::string name, const char* vertexPath, const char* fragmentPath);
-    static Shader* GetShader(const std::string name);
+    static Shader LoadShader(const std::string name, const char* vertexPath, const char* fragmentPath);
+    static Shader GetShader(const std::string name);
     static void Clear();
 private:
-    static std::map<std::string, Shader*> m_shaders;
+    static std::map<std::string, Shader> m_shaders;
     static std::string m_ResourcesPath;
 };

@@ -5,17 +5,16 @@
 #include <sstream>
 #include <filesystem>
 
-std::map<std::string, Shader*> Assets::m_shaders;
+std::map<std::string, Shader> Assets::m_shaders;
 std::string Assets::m_ResourcesPath;
 
 void Assets::Init()
 {
     std::string rootPath = std::__fs::filesystem::current_path() / "resources/"; // "/" appends a path
-    std::cout << rootPath << '\n';
     m_ResourcesPath = rootPath;
 }
 
-Shader* Assets::LoadShader(const std::string name, const char* vertexPath, const char* fragmentPath)
+Shader Assets::LoadShader(const std::string name, const char* vertexPath, const char* fragmentPath)
 {
     Init();
     std::string vertexCode;
@@ -47,15 +46,15 @@ Shader* Assets::LoadShader(const std::string name, const char* vertexPath, const
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
     
-    Shader* shader = new Shader();
-    shader->Compile(vShaderCode, fShaderCode);
+    Shader shader;
+    shader.Compile(vShaderCode, fShaderCode);
 
     m_shaders[name] = shader;
 
     return shader;
 }
 
-Shader* Assets::GetShader(const std::string name)
+Shader Assets::GetShader(const std::string name)
 {
     return m_shaders[name];
 }
@@ -63,6 +62,6 @@ Shader* Assets::GetShader(const std::string name)
 void Assets::Clear()
 {
     for(auto i : m_shaders)
-        glDeleteProgram(i.second->ID);
+        glDeleteProgram(i.second.ID);
 }
 
