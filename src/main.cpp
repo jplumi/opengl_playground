@@ -4,8 +4,10 @@
 #include "Assets.hpp"
 #include "Settings.hpp"
 #include "Shader.hpp"
+#include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
+#include "VertexBufferLayout.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -77,17 +79,15 @@ int main()
         1, 2, 3
     };
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
+    VertexArray VAO;
 
-    glBindVertexArray(VAO);
+    VertexBuffer VBO(vertices, sizeof(vertices));
+    IndexBuffer EBO(indices, sizeof(indices));
 
-    VertexBuffer vb(vertices, sizeof(vertices));
+    VertexBufferLayout vertexLayout;
+    vertexLayout.Push(GL_FLOAT, 2);
 
-    IndexBuffer ib(indices, sizeof(indices));
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    VAO.AddBuffer(VBO, vertexLayout);
 
     while(!glfwWindowShouldClose(window))
     {
@@ -97,7 +97,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         baseShader.Use();
-        ib.Bind();
+
+        VAO.Bind();
+        EBO.Bind();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

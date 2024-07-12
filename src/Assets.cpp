@@ -16,7 +16,6 @@ void Assets::Init()
 
 Shader Assets::LoadShader(const std::string name, const char* vertexPath, const char* fragmentPath)
 {
-    Init();
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
