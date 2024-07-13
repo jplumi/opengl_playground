@@ -58,9 +58,5 @@ Shader Assets::GetShader(const std::string name)
     return m_shaders[name];
 }
 
-void Assets::Clear()
-{
-    for(auto i : m_shaders)
-        glDeleteProgram(i.second.ID);
-}
+void Assets::Clear() {}
 
