@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Assets.hpp"
+#include "Renderer.hpp"
 #include "Settings.hpp"
 #include "Shader.hpp"
 #include "VertexArray.hpp"
@@ -66,6 +67,8 @@ int main()
 
     Assets::Init();
     Shader baseShader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
+    baseShader.Bind();
+    baseShader.SetVec3("color", 0.2f, 0.5f, 0.8f);
 
     // ====== BUFFERS
     float vertices[] = {
@@ -89,19 +92,15 @@ int main()
 
     VAO.AddBuffer(VBO, vertexLayout);
 
+    Renderer renderer;
+
     while(!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.Clear();
 
-        baseShader.Bind();
-
-        VAO.Bind();
-        EBO.Bind();
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        renderer.Draw(VAO, EBO, baseShader);
 
         glfwSwapBuffers(window);
     }

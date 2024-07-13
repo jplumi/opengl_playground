@@ -4,7 +4,6 @@
 
 Shader::~Shader()
 {
-    std::cout << "shader deleted\n";
     glDeleteProgram(m_ID);
 }
 
