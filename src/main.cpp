@@ -5,25 +5,13 @@
 #include "Renderer.hpp"
 #include "Settings.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "VertexBufferLayout.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-static void GLClearError()
-{
-    while(glGetError() != GL_NO_ERROR);
-}
-
-static void GLCheckError()
-{
-    while(GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error]: " << error << '\n';
-    }
-}
 
 WindowSettings windowSettings;
 
@@ -61,21 +49,31 @@ int main()
 
     glViewport(0, 0, windowSettings.width, windowSettings.height);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glfwSetKeyCallback(window, glfwKeyCallback);
+
+    Assets::Init();
+
+    // ====== TEXTURE
+
+    Texture texture = Assets::LoadTexture("texture", "images/player.png");
+    texture.Bind();
 
     // ====== SHADER
 
-    Assets::Init();
     Shader baseShader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
     baseShader.Bind();
     baseShader.SetVec3("color", 0.2f, 0.5f, 0.8f);
+    baseShader.SetInt("u_Texture", 0);
 
     // ====== BUFFERS
     float vertices[] = {
-        0.5f,  0.5f,   // top right
-        0.5f, -0.5f,   // bottom right
-        -0.5f, -0.5f,  // bottom left
-        -0.5f,  0.5f   // top left 
+        0.5f,  0.5f,  1.0f, 1.0f,   // top right
+        0.5f, -0.5f,  1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f, 1.0f,   // top left 
     };
     unsigned int indices[] = {
         0, 1, 3,
@@ -88,6 +86,7 @@ int main()
     IndexBuffer EBO(indices, sizeof(indices));
 
     VertexBufferLayout vertexLayout;
+    vertexLayout.Push(GL_FLOAT, 2);
     vertexLayout.Push(GL_FLOAT, 2);
 
     VAO.AddBuffer(VBO, vertexLayout);

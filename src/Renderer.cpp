@@ -1,4 +1,18 @@
 #include "Renderer.hpp"
+#include <iostream>
+
+void Renderer::GLClearError()
+{
+    while(glGetError() != GL_NO_ERROR);
+}
+
+void Renderer::GLCheckError()
+{
+    while(GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL Error]: " << error << '\n';
+    }
+}
 
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 {
@@ -11,7 +25,8 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 
 void Renderer::Clear() const
 {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.3f, 0.5f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
