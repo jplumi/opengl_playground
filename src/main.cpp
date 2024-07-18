@@ -10,6 +10,7 @@
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "VertexBufferLayout.hpp"
+#include "glm/ext/matrix_transform.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -54,6 +55,21 @@ int main()
 
     glfwSetKeyCallback(window, glfwKeyCallback);
 
+    // ====== MATRICES
+
+    // glm::mat4 projection = glm::ortho(-w/2, w/2, h/2, -h/2, -1.0f, 1.0f);
+    // glm::mat4 projection = glm::ortho(-450.0f, 450.0f, -450.0f, 450.0f, -1.0f, 1.0f);
+    glm::mat4 projection = glm::ortho(
+        -(float)windowSettings.width/2,
+        (float)windowSettings.width/2,
+        -(float)windowSettings.height/2,
+        (float)windowSettings.height/2,
+        -1.0f, 1.0f);
+
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(600, 0, 0));
+
     Assets::Init();
 
     // ====== TEXTURE
@@ -67,13 +83,16 @@ int main()
     baseShader.Bind();
     baseShader.SetVec3("color", 0.2f, 0.5f, 0.8f);
     baseShader.SetInt("u_Texture", 0);
+    baseShader.SetMat4("u_Projection", projection);
+    baseShader.SetMat4("u_View", view);
+    baseShader.SetMat4("u_Model", model);
 
     // ====== BUFFERS
     float vertices[] = {
-        0.5f,  0.5f,  1.0f, 1.0f,   // top right
-        0.5f, -0.5f,  1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f, 1.0f,   // top left 
+        100.0f,  100.0f,  1.0f, 1.0f,   // top right
+        100.0f, -100.0f,  1.0f, 0.0f,   // bottom right
+        -100.0f, -100.0f, 0.0f, 0.0f,   // bottom left
+        -100.0f,  100.0f, 0.0f, 1.0f,   // top left 
     };
     unsigned int indices[] = {
         0, 1, 3,

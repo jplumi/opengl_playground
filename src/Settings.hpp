@@ -1,10 +1,9 @@
 #pragma once
 
-#include <cstdint>
 struct WindowSettings
 {
-    uint32_t height = 900;
-    uint32_t width = 900;
+    unsigned int height = 1080;
+    unsigned int width = 1920;
     const char* title = "Game";
 };
 
