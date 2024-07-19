@@ -134,8 +134,8 @@ int main()
         ImGui::NewFrame();
 
         glm::mat4 model(1.0f);
-        model = glm::scale(model, scale);
         model = glm::translate(model, translation);
+        model = glm::scale(model, scale);
 
         baseShader.SetMat4("u_Model", model);
 
