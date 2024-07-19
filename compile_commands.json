@@ -7,6 +7,7 @@
       "-std=c++17",
       "-Idependencies/include",
       "-Isrc",
+      "-Isrc/vendor",
       "-DDEV_BUILD",
       "-g",
       "-o",
@@ -25,6 +26,83 @@
       "-std=c++17",
       "-Idependencies/include",
       "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/VertexBuffer.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/VertexBuffer.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/Assets.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/Assets.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/VertexArray.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/VertexArray.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/Texture.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/Texture.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
       "-DDEV_BUILD",
       "-g",
       "-o",
@@ -43,14 +121,15 @@
       "-std=c++17",
       "-Idependencies/include",
       "-Isrc",
+      "-Isrc/vendor",
       "-DDEV_BUILD",
       "-g",
       "-o",
       "out/game",
-      "src/ResourceManager.cpp"
+      "src/main.cpp"
     ],
     "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
-    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/ResourceManager.cpp",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/main.cpp",
     "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
   },
   {
@@ -61,14 +140,129 @@
       "-std=c++17",
       "-Idependencies/include",
       "-Isrc",
+      "-Isrc/vendor",
       "-DDEV_BUILD",
       "-g",
       "-o",
       "out/game",
-      "src/main.cpp"
+      "src/IndexBuffer.cpp"
     ],
     "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
-    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/main.cpp",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/IndexBuffer.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/vendor/imgui/imgui_widgets.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/vendor/imgui/imgui_widgets.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/vendor/imgui/imgui.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/vendor/imgui/imgui.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/vendor/imgui/imgui_tables.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/vendor/imgui/imgui_tables.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/vendor/imgui/imgui_demo.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/vendor/imgui/imgui_demo.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/vendor/imgui/imgui_draw.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/vendor/imgui/imgui_draw.cpp",
+    "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-Idependencies/include",
+      "-Isrc",
+      "-Isrc/vendor",
+      "-DDEV_BUILD",
+      "-g",
+      "-o",
+      "out/game",
+      "src/Renderer.cpp"
+    ],
+    "directory": "/Users/joaolumi/Documents/cpp/opengl_playground",
+    "file": "/Users/joaolumi/Documents/cpp/opengl_playground/src/Renderer.cpp",
     "output": "/Users/joaolumi/Documents/cpp/opengl_playground/out/game"
   }
 ]

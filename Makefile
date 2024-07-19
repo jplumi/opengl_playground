@@ -2,7 +2,7 @@ CC := clang++
 FLAGS := -Wall -std=c++17
 LIBS_PATH := -Ldependencies/lib
 LIBS := -lglfw.3.4
-INCLUDES := -Idependencies/include -Isrc
+INCLUDES := -Idependencies/include -Isrc -Isrc/vendor
 SRC := src
 CPP_SRCS=$(shell find $(SRC) -name "*.cpp")
 
@@ -19,4 +19,6 @@ clean:
 	rm -rf out/* 
 
 all: debug run
+
+# run 'bear -- make debug' to generate compile_commands.json
 
