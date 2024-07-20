@@ -13,6 +13,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "tests/TestClearColor.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -65,92 +66,31 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 410");
 
     ImGui::StyleColorsDark();
-    
-    // ====== MATRICES
 
-    // glm::mat4 projection = glm::ortho(-w/2, w/2, h/2, -h/2, -1.0f, 1.0f);
-    // glm::mat4 projection = glm::ortho(-450.0f, 450.0f, -450.0f, 450.0f, -1.0f, 1.0f);
-    glm::mat4 projection = glm::ortho(
-        -(float)windowSettings.width/2,
-        (float)windowSettings.width/2,
-        -(float)windowSettings.height/2,
-        (float)windowSettings.height/2,
-        -1.0f, 1.0f);
-
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    // glm::mat4 projection = glm::ortho(
+    //     -(float)windowSettings.width/2,
+    //     (float)windowSettings.width/2,
+    //     -(float)windowSettings.height/2,
+    //     (float)windowSettings.height/2,
+    //     -1.0f, 1.0f);
 
     Assets::Init();
-
-    // ====== TEXTURE
-
-    Texture texture = Assets::LoadTexture("texture", "images/player.png");
-    texture.Bind();
-
-    // ====== SHADER
-
-    Shader baseShader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
-    baseShader.Bind();
-    baseShader.SetVec3("color", 0.2f, 0.5f, 0.8f);
-    baseShader.SetInt("u_Texture", 0);
-    baseShader.SetMat4("u_Projection", projection);
-    baseShader.SetMat4("u_View", view);
-
-    // ====== BUFFERS
-    float vertices[] = {
-        100.0f,  100.0f,  1.0f, 1.0f,   // top right
-        100.0f, -100.0f,  1.0f, 0.0f,   // bottom right
-        -100.0f, -100.0f, 0.0f, 0.0f,   // bottom left
-        -100.0f,  100.0f, 0.0f, 1.0f,   // top left 
-    };
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    VertexArray VAO;
-
-    VertexBuffer VBO(vertices, sizeof(vertices));
-    IndexBuffer EBO(indices, sizeof(indices));
-
-    VertexBufferLayout vertexLayout;
-    vertexLayout.Push(GL_FLOAT, 2);
-    vertexLayout.Push(GL_FLOAT, 2);
-
-    VAO.AddBuffer(VBO, vertexLayout);
-
     Renderer renderer;
 
-    glm::vec3 translation(0, 0, 0);
-    glm::vec3 scale(1, 1, 1);
+    test::TestClearColor test;
 
     while(!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-
         renderer.Clear();
+
+        test.Update(0.0f);
+        test.Render();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, translation);
-        model = glm::scale(model, scale);
-
-        baseShader.SetMat4("u_Model", model);
-
-        renderer.Draw(VAO, EBO, baseShader);
-
-        {
-            ImGui::Begin("Settings");                          // Create a window called "Hello, world!" and append into it.
-            
-            ImGui::SliderFloat2("Position", &translation.x, -500.0f, 500.0f);
-            ImGui::SliderFloat2("Scale", &scale.x, 0.0f, 10.0f);
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
-            ImGui::End();
-        }
-
+        test.ImGuiRender();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

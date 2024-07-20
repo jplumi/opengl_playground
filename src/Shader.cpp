@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+unsigned int Shader::m_LastBoundProgram = 0;
+
 Shader::~Shader()
 {
     glDeleteProgram(m_ID);
@@ -53,7 +55,11 @@ void Shader::Compile(const char* vSource, const char* fSource)
 
 void Shader::Bind() const
 {
-    glUseProgram(m_ID);
+    if(m_LastBoundProgram != m_ID)
+    {
+        glUseProgram(m_ID);
+        m_LastBoundProgram = m_ID;
+    }
 }
 
 void Shader::Unbind() const
