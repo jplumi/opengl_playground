@@ -20,7 +20,7 @@ void Assets::Init()
     m_ResourcesPath = rootPath;
 }
 
-Shader Assets::LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath)
+Shader& Assets::LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath)
 {
     std::string vertexCode;
     std::string fragmentCode;
@@ -51,20 +51,19 @@ Shader Assets::LoadShader(const std::string& name, const char* vertexPath, const
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
     
-    Shader shader;
-    shader.Compile(vShaderCode, fShaderCode);
+    // shader->Compile(vShaderCode, fShaderCode);
 
-    m_shaders[name] = shader;
-
-    return shader;
+    m_shaders[name] = Shader();
+    m_shaders[name].Compile(vShaderCode, fShaderCode);
+    return m_shaders[name];
 }
 
-Shader Assets::GetShader(const std::string& name)
+Shader& Assets::GetShader(const std::string& name)
 {
     return m_shaders[name];
 }
 
-Texture Assets::LoadTexture(const std::string& name, const char* path)
+Texture& Assets::LoadTexture(const std::string& name, const char* path)
 {
     stbi_set_flip_vertically_on_load(1);
     int width, height, bpp;
@@ -86,16 +85,20 @@ Texture Assets::LoadTexture(const std::string& name, const char* path)
     if(imgData)
         stbi_image_free(imgData);
 
-    Texture texture(texId, width, height, bpp);
-    m_textures[name] = texture;
+    m_textures[name] = Texture();
+    m_textures[name].SetData(texId, width, height, bpp);
 
-    return texture;
+    return m_textures[name];
 }
 
-Texture Assets::GetTexture(const std::string& name)
+Texture& Assets::GetTexture(const std::string& name)
 {
     return m_textures[name];
 }
 
-void Assets::Clear() {}
+void Assets::Clear()
+{
+    m_textures.clear();
+    m_shaders.clear();
+}
 

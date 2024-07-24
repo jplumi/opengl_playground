@@ -7,6 +7,8 @@ public:
     Texture(unsigned int texId, int width, int height, int bpp);
     ~Texture();
 
+    void SetData(unsigned int texId, int width, int height, int bpp);
+
     void Bind(unsigned int slot = 0) const;
     void Unbind() const;
 

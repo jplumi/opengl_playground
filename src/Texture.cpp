@@ -1,5 +1,6 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include <iostream>
 
 Texture::Texture() {}
 
@@ -9,7 +10,15 @@ Texture::Texture(unsigned int texId, int width, int height, int bpp)
 
 Texture::~Texture()
 {
+    std::cout << "delete texture: " << m_ID << '\n';
     glDeleteTextures(1, &m_ID);
+}
+
+void Texture::SetData(unsigned int texId, int width, int height, int bpp)
+{
+    m_ID = texId;
+    m_Width = width;
+    m_Height = height;
 }
 
 void Texture::Bind(unsigned int slot) const

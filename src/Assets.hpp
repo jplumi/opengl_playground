@@ -10,11 +10,11 @@ class Assets
 public:
     static void Init();
 
-    static Shader LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath);
-    static Shader GetShader(const std::string& name);
+    static Shader& LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath);
+    static Shader& GetShader(const std::string& name);
 
-    static Texture LoadTexture(const std::string& name, const char* path);
-    static Texture GetTexture(const std::string& name);
+    static Texture& LoadTexture(const std::string& name, const char* path);
+    static Texture& GetTexture(const std::string& name);
 
     static void Clear();
 private:

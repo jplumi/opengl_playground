@@ -11,7 +11,7 @@ public:
     ~TestClearColor();
 
     void Update(float deltaTime) override;
-    void Render() override;
+    void Render(const Renderer& renderer) override;
     void ImGuiRender() override;
 private:
     float m_ClearColor[4];

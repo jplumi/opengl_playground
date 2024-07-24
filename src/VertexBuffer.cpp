@@ -1,6 +1,7 @@
 #include "VertexBuffer.hpp"
 
 #include <glad/glad.h>
+#include <iostream>
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
@@ -11,6 +12,7 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 
 VertexBuffer::~VertexBuffer()
 {
+    std::cout << "delete vbo " << m_RendererID << '\n';
     glDeleteBuffers(1, &m_RendererID);
 }
 
