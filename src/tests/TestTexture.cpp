@@ -7,13 +7,14 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "imgui/imgui.h"
+#include "Settings.hpp"
 
 namespace test {
 
 TestTexture::TestTexture()
     : m_Translation(glm::vec3(0.0f)) 
 {
-    glm::mat4 projection = glm::ortho(-500.0f, 500.0f, -500.0f, 500.0f, -1.0f, 1.0f);
+    glm::mat4 projection = glm::ortho(-(float) WINDOW_WIDTH/2, (float) WINDOW_WIDTH/2, -(float) WINDOW_HEIGHT/2, (float) WINDOW_HEIGHT/2, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 
     m_Shader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
