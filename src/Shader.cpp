@@ -1,5 +1,4 @@
 #include "Shader.hpp"
-#include "Renderer.hpp"
 
 #include <iostream>
 
@@ -7,7 +6,6 @@ unsigned int Shader::m_LastBoundProgram = 0;
 
 Shader::~Shader()
 {
-    std::cout << "delete shader " << m_ID << '\n';
     glDeleteProgram(m_ID);
 }
 
@@ -59,9 +57,7 @@ void Shader::Bind() const
 {
     if(m_LastBoundProgram != m_ID)
     {
-        Renderer renderer;
         glUseProgram(m_ID);
-        std::cout << "Bind shader: " << m_ID << '\n'; renderer.GLCheckError();
         m_LastBoundProgram = m_ID;
     }
 }

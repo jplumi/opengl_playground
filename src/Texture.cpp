@@ -10,7 +10,6 @@ Texture::Texture(unsigned int texId, int width, int height, int bpp)
 
 Texture::~Texture()
 {
-    std::cout << "delete texture: " << m_ID << '\n';
     glDeleteTextures(1, &m_ID);
 }
 

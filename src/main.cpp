@@ -4,10 +4,13 @@
 #include "Assets.hpp"
 #include "Renderer.hpp"
 #include "Settings.hpp"
+#include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/Test.hpp"
+#include "tests/TestMenu.hpp"
 #include "tests/TestTexture.hpp"
+#include "tests/TestClearColor.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -63,27 +66,43 @@ int main()
 
     Renderer renderer;
 
-    test::Test* test = new test::TestTexture();
+    test::Test* currentTest = nullptr;
+    test::TestMenu* testMenu = new test::TestMenu(currentTest);
+    currentTest = testMenu;
+    
+    testMenu->RegisterTest<test::TestTexture>("texture test");
+    testMenu->RegisterTest<test::TestClearColor>("Clear color test");
 
     while(!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
         renderer.Clear();
 
-        test->Update(0.0f);
-        test->Render(renderer);
-
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        test->ImGuiRender();
+        if(currentTest)
+        {
+            currentTest->Update(0.0);
+            currentTest->Render(renderer);
+            ImGui::Begin("Test");
+            if(currentTest != testMenu && ImGui::Button("<-"))
+            {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+            currentTest->ImGuiRender();
+            ImGui::End();
+        }
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
     }
 
-    delete test;
+    if(testMenu != currentTest)
+        delete testMenu;
+    delete currentTest;
 
     Assets::Clear();
 

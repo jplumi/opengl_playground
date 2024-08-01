@@ -9,8 +9,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-std::map<std::string, Shader> Assets::m_shaders;
-std::map<std::string, Texture> Assets::m_textures;
+std::map<std::string, Shader*> Assets::m_shaders;
+std::map<std::string, Texture*> Assets::m_textures;
 
 std::string Assets::m_ResourcesPath;
 
@@ -20,8 +20,11 @@ void Assets::Init()
     m_ResourcesPath = rootPath;
 }
 
-Shader& Assets::LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath)
+Shader* Assets::LoadShader(const std::string& name, const char* vertexPath, const char* fragmentPath)
 {
+    if(m_shaders.count(name) != 0)
+        return m_shaders[name];
+
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -51,20 +54,21 @@ Shader& Assets::LoadShader(const std::string& name, const char* vertexPath, cons
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
     
-    // shader->Compile(vShaderCode, fShaderCode);
-
-    m_shaders[name] = Shader();
-    m_shaders[name].Compile(vShaderCode, fShaderCode);
+    m_shaders[name] = new Shader();
+    m_shaders[name]->Compile(vShaderCode, fShaderCode);
     return m_shaders[name];
 }
 
-Shader& Assets::GetShader(const std::string& name)
+Shader* Assets::LoadShader(const std::string& name)
 {
     return m_shaders[name];
 }
 
-Texture& Assets::LoadTexture(const std::string& name, const char* path)
+Texture* Assets::LoadTexture(const std::string& path)
 {
+    if(m_textures.count(path) != 0)
+        return m_textures[path];
+
     stbi_set_flip_vertically_on_load(1);
     int width, height, bpp;
     std::string fullpath = m_ResourcesPath + path;
@@ -85,20 +89,19 @@ Texture& Assets::LoadTexture(const std::string& name, const char* path)
     if(imgData)
         stbi_image_free(imgData);
 
-    m_textures[name] = Texture();
-    m_textures[name].SetData(texId, width, height, bpp);
+    m_textures[path] = new Texture();
+    m_textures[path]->SetData(texId, width, height, bpp);
 
-    return m_textures[name];
-}
-
-Texture& Assets::GetTexture(const std::string& name)
-{
-    return m_textures[name];
+    return m_textures[path];
 }
 
 void Assets::Clear()
 {
-    m_textures.clear();
+    for(auto shader : m_shaders)
+        delete shader.second;
     m_shaders.clear();
+    for(auto tex : m_textures)
+        delete tex.second;
+    m_textures.clear();
 }
 

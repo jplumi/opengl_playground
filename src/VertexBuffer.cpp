@@ -12,7 +12,6 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 
 VertexBuffer::~VertexBuffer()
 {
-    std::cout << "delete vbo " << m_RendererID << '\n';
     glDeleteBuffers(1, &m_RendererID);
 }
 
