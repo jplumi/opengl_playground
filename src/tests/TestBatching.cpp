@@ -1,4 +1,4 @@
-#include "TestTexture.hpp"
+#include "TestBatching.hpp"
 
 #include "Assets.hpp"
 #include "IndexBuffer.hpp"
@@ -11,7 +11,7 @@
 
 namespace test {
 
-TestTexture::TestTexture()
+TestBatching::TestBatching()
     : m_Translation(glm::vec3(0.0f)) 
 {
     glm::mat4 projection = glm::ortho(
@@ -57,14 +57,14 @@ TestTexture::TestTexture()
     m_VAO->AddBuffer(*m_VBO, vertexLayout);
 }
 
-TestTexture::~TestTexture()
+TestBatching::~TestBatching()
 {
     delete m_VAO;
     delete m_VBO;
     delete m_EBO;
 }
 
-void TestTexture::Render(const Renderer& renderer)
+void TestBatching::Render(const Renderer& renderer)
 {
     m_Texture->Bind();
 
@@ -76,7 +76,7 @@ void TestTexture::Render(const Renderer& renderer)
     renderer.Draw(*m_VAO, *m_EBO, *m_Shader);
 }
 
-void TestTexture::ImGuiRender()
+void TestBatching::ImGuiRender()
 {
     ImGui::SliderFloat2("Position", &m_Translation.x, -500.0f, 500.0f);
 }

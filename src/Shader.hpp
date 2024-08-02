@@ -25,8 +25,8 @@ public:
 private:
     unsigned int m_ID;
 
-    std::unordered_map<std::string, int> m_uniformLocationCache;
+    mutable std::unordered_map<std::string, int> m_uniformLocationCache;
     static unsigned int m_LastBoundProgram;
 
-    int GetUniformLocation(const std::string& name);
+    int GetUniformLocation(const std::string& name) const;
 };

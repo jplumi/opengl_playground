@@ -96,7 +96,7 @@ void Shader::SetVec3(const std::string &name, float v1, float v2, float v3)
     glUniform3f(GetUniformLocation(name), v1, v2, v3);
 }
 
-int Shader::GetUniformLocation(const std::string& name)
+int Shader::GetUniformLocation(const std::string& name) const
 {
     if(m_uniformLocationCache.find(name) != m_uniformLocationCache.end())
         return m_uniformLocationCache[name];
