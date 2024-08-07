@@ -46,7 +46,7 @@ std::array<Vertex, 4> VertexArray::CreateQuad(float x, float y, glm::vec3 color,
 {
     Vertex v0;
     v0.position = {x, y};
-    v0.texCoords = {1.0f, 1.0f};
+    v0.texCoords = {0.0f, 0.0f};
     v0.color = color;
 
     Vertex v1;
@@ -56,7 +56,7 @@ std::array<Vertex, 4> VertexArray::CreateQuad(float x, float y, glm::vec3 color,
 
     Vertex v2;
     v2.position = {x + size, y + size};
-    v2.texCoords = {0.0f, 0.0f};
+    v2.texCoords = {1.0f, 1.0f};
     v2.color = color;
 
     Vertex v3;

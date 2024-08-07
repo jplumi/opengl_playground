@@ -32,7 +32,7 @@ TestTexture::TestTexture()
 
     unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
-    auto quad1 = VertexArray::CreateQuad(50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    auto quad1 = VertexArray::CreateQuad(-50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
     Vertex vertices[4];
     memcpy(vertices, quad1.data(), quad1.size() * sizeof(Vertex));
@@ -43,8 +43,9 @@ TestTexture::TestTexture()
     m_EBO = new IndexBuffer(indices, sizeof(indices));
 
     VertexBufferLayout vertexLayout;
-    vertexLayout.Push(GL_FLOAT, 2);
-    vertexLayout.Push(GL_FLOAT, 2);
+    vertexLayout.Push(GL_FLOAT, 2); // position
+    vertexLayout.Push(GL_FLOAT, 2); // tex coords;
+    vertexLayout.Push(GL_FLOAT, 3); // color
 
     m_VAO->AddBuffer(*m_VBO, vertexLayout);
 }
@@ -58,7 +59,7 @@ TestTexture::~TestTexture()
 
 void TestTexture::Render()
 {
-    m_Texture->Bind();
+    // m_Texture->Bind();
 
     glm::mat4 model(1.0f);
     model = glm::translate(model, m_Translation);
