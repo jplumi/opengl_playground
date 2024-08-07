@@ -15,12 +15,12 @@ TestTexture::TestTexture()
     : m_Translation(glm::vec3(0.0f)) 
 {
     glm::mat4 projection = glm::ortho(
-        -(float)WINDOW_WIDTH / 2, (float)WINDOW_WIDTH / 2,
-        -(float)WINDOW_HEIGHT / 2, (float)WINDOW_HEIGHT / 2, -1.0f, 1.0f);
+        -g_WindowSettings.width / 2, g_WindowSettings.width / 2,
+        -g_WindowSettings.height / 2, g_WindowSettings.height / 2, -1.0f, 1.0f);
 
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
     
-    m_Shader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
+    m_Shader = Assets::LoadShader("textureShader", "vert_Texture2D.glsl", "frag_Texture2D.glsl");
     m_Shader->Bind();
     m_Shader->SetVec3("u_Color", 1.0f, 1.0f, 1.0f);
     m_Shader->SetInt("u_Texture", 0);
@@ -30,17 +30,9 @@ TestTexture::TestTexture()
     m_Texture = Assets::LoadTexture("images/player.png");
     m_Texture->Bind();
 
-    // ====== BUFFERS
-    // float vertices[] = {
-    //     50.0f,  50.0f,  1.0f, 1.0f, // top right
-    //     50.0f,  -50.0f, 1.0f, 0.0f, // bottom right
-    //     -50.0f, -50.0f, 0.0f, 0.0f, // bottom left
-    //     -50.0f, 50.0f,  0.0f, 1.0f, // top left
-    // };
     unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
-    auto quad1 = VertexArray::CreateQuad(50.0f, 50.0f);
-    // auto quad2 = CreateQuad(50.0f, -50.0f);
+    auto quad1 = VertexArray::CreateQuad(50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
     Vertex vertices[4];
     memcpy(vertices, quad1.data(), quad1.size() * sizeof(Vertex));
@@ -64,7 +56,7 @@ TestTexture::~TestTexture()
     delete m_EBO;
 }
 
-void TestTexture::Render(const Renderer& renderer)
+void TestTexture::Render()
 {
     m_Texture->Bind();
 
@@ -73,7 +65,7 @@ void TestTexture::Render(const Renderer& renderer)
     m_Shader->Bind();
     m_Shader->SetMat4("u_Model", model);
 
-    renderer.Draw(*m_VAO, *m_EBO, *m_Shader);
+    Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }
 
 void TestTexture::ImGuiRender()

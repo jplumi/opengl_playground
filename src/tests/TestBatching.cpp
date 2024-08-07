@@ -6,6 +6,7 @@
 #include "VertexArray.hpp"
 #include <cstring>
 #include <glad/glad.h>
+#include "glm/fwd.hpp"
 #include "imgui/imgui.h"
 #include "Settings.hpp"
 
@@ -15,35 +16,28 @@ TestBatching::TestBatching()
     : m_Translation(glm::vec3(0.0f)) 
 {
     glm::mat4 projection = glm::ortho(
-        -(float)WINDOW_WIDTH / 2, (float)WINDOW_WIDTH / 2,
-        -(float)WINDOW_HEIGHT / 2, (float)WINDOW_HEIGHT / 2, -1.0f, 1.0f);
+        -g_WindowSettings.width/2, g_WindowSettings.width/2,
+        -g_WindowSettings.height/2, g_WindowSettings.height/2, -1.0f, 1.0f);
 
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
     
-    m_Shader = Assets::LoadShader("base", "vBase.glsl", "fBase.glsl");
+    m_Shader = Assets::LoadShader("baseShader", "vert_Base.glsl", "frag_Base.glsl");
     m_Shader->Bind();
     m_Shader->SetVec3("u_Color", 1.0f, 1.0f, 1.0f);
-    m_Shader->SetInt("u_Texture", 0);
     m_Shader->SetMat4("u_Projection", projection);
     m_Shader->SetMat4("u_View", view);
+ 
+    auto quad1 = VertexArray::CreateQuad(-50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    auto quad2 = VertexArray::CreateQuad(50.0f, 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
-    m_Texture = Assets::LoadTexture("images/player.png");
-    m_Texture->Bind();
-
-    // ====== BUFFERS
-    // float vertices[] = {
-    //     50.0f,  50.0f,  1.0f, 1.0f, // top right
-    //     50.0f,  -50.0f, 1.0f, 0.0f, // bottom right
-    //     -50.0f, -50.0f, 0.0f, 0.0f, // bottom left
-    //     -50.0f, 50.0f,  0.0f, 1.0f, // top left
-    // };
-    unsigned int indices[] = {0, 1, 3, 1, 2, 3};
-
-    auto quad1 = VertexArray::CreateQuad(50.0f, 50.0f);
-    // auto quad2 = CreateQuad(50.0f, -50.0f);
-
-    Vertex vertices[4];
+    Vertex vertices[8];
     memcpy(vertices, quad1.data(), quad1.size() * sizeof(Vertex));
+    memcpy(vertices + quad1.size(), quad2.data(), quad2.size() * sizeof(Vertex));
+
+    unsigned int indices[] = {
+        0, 1, 3, 1, 2, 3,
+        4, 5, 7, 5, 6, 7 
+    };
 
     m_VAO = new VertexArray();
 
@@ -51,8 +45,9 @@ TestBatching::TestBatching()
     m_EBO = new IndexBuffer(indices, sizeof(indices));
 
     VertexBufferLayout vertexLayout;
-    vertexLayout.Push(GL_FLOAT, 2);
-    vertexLayout.Push(GL_FLOAT, 2);
+    vertexLayout.Push(GL_FLOAT, 2); // position
+    vertexLayout.Push(GL_FLOAT, 2); // tex coords;
+    vertexLayout.Push(GL_FLOAT, 3); // color
 
     m_VAO->AddBuffer(*m_VBO, vertexLayout);
 }
@@ -64,16 +59,14 @@ TestBatching::~TestBatching()
     delete m_EBO;
 }
 
-void TestBatching::Render(const Renderer& renderer)
+void TestBatching::Render()
 {
-    m_Texture->Bind();
-
     glm::mat4 model(1.0f);
     model = glm::translate(model, m_Translation);
     m_Shader->Bind();
     m_Shader->SetMat4("u_Model", model);
 
-    renderer.Draw(*m_VAO, *m_EBO, *m_Shader);
+    Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }
 
 void TestBatching::ImGuiRender()

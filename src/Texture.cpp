@@ -1,6 +1,6 @@
 #include "Texture.hpp"
+#include "Renderer.hpp"
 #include "Shader.hpp"
-#include <iostream>
 
 Texture::Texture() {}
 
@@ -10,7 +10,7 @@ Texture::Texture(unsigned int texId, int width, int height, int bpp)
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &m_ID);
+    GLCall(glDeleteTextures(1, &m_ID));
 }
 
 void Texture::SetData(unsigned int texId, int width, int height, int bpp)
@@ -22,12 +22,12 @@ void Texture::SetData(unsigned int texId, int width, int height, int bpp)
 
 void Texture::Bind(unsigned int slot) const
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_ID);
+    GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+    GLCall(glBindTexture(GL_TEXTURE_2D, m_ID));
 }
 
 void Texture::Unbind() const
 {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 

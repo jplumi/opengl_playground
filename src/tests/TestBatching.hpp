@@ -1,7 +1,9 @@
 #pragma once
 
+#include "IndexBuffer.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "VertexArray.hpp"
 #include "tests/Test.hpp"
 
 namespace test {
@@ -12,7 +14,7 @@ public:
     TestBatching();
     ~TestBatching();
 
-    void Render(const Renderer& renderer) override;
+    void Render() override;
     void ImGuiRender() override;
 private:
     glm::vec3 m_Translation;

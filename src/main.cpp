@@ -8,13 +8,12 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/Test.hpp"
+#include "tests/TestBatching.hpp"
 #include "tests/TestMenu.hpp"
 #include "tests/TestTexture.hpp"
 #include "tests/TestClearColor.hpp"
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-WindowSettings windowSettings;
 
 GLFWwindow* window;
 
@@ -34,7 +33,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(windowSettings.width, windowSettings.height, windowSettings.title, NULL, NULL);
+    window = glfwCreateWindow(g_WindowSettings.width, g_WindowSettings.height, g_WindowSettings.title, NULL, NULL);
     if(window == NULL)
     {
         std::cout << "Error creating window\n";
@@ -50,10 +49,10 @@ int main()
         return -1;
     }
 
-    glViewport(0, 0, windowSettings.width, windowSettings.height);
+    GLCall(glViewport(0, 0, g_WindowSettings.width, g_WindowSettings.height));
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -72,6 +71,7 @@ int main()
     
     testMenu->RegisterTest<test::TestTexture>("texture test");
     testMenu->RegisterTest<test::TestClearColor>("Clear color test");
+    testMenu->RegisterTest<test::TestBatching>("Batching test");
 
     while(!glfwWindowShouldClose(window))
     {
@@ -84,7 +84,7 @@ int main()
         if(currentTest)
         {
             currentTest->Update(0.0);
-            currentTest->Render(renderer);
+            currentTest->Render();
             ImGui::Begin("Test");
             if(currentTest != testMenu && ImGui::Button("<-"))
             {

@@ -15,7 +15,7 @@ void TestClearColor::Update(float deltaTime)
 
 }
 
-void TestClearColor::Render(const Renderer& renderer)
+void TestClearColor::Render()
 {
     glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
     glClear(GL_COLOR_BUFFER_BIT);

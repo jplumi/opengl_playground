@@ -1,5 +1,6 @@
 #include "Assets.hpp"
 
+#include "Renderer.hpp"
 #include "Texture.hpp"
 #include <fstream>
 #include <iostream>
@@ -75,16 +76,16 @@ Texture* Assets::LoadTexture(const std::string& path)
     unsigned char* imgData = stbi_load(fullpath.c_str(), &width, &height, &bpp, 4);
 
     unsigned int texId;
-    glGenTextures(1, &texId);
-    glBindTexture(GL_TEXTURE_2D, texId);
+    GLCall(glGenTextures(1, &texId));
+    GLCall(glBindTexture(GL_TEXTURE_2D, texId));
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgData);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgData));
+    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
     if(imgData)
         stbi_image_free(imgData);

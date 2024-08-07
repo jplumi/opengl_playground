@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Renderer.hpp"
-
 namespace test {
 
 class Test
@@ -11,7 +9,7 @@ public:
     virtual ~Test() {}
 
     virtual void Update(float deltaTime) {}
-    virtual void Render(const Renderer& renderer) {}
+    virtual void Render() {}
     virtual void ImGuiRender() {}
 };
 
