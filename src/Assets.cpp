@@ -1,6 +1,6 @@
 #include "Assets.hpp"
 
-#include "Renderer.hpp"
+#include "OpenGLDebug.hpp"
 #include "Texture.hpp"
 #include <fstream>
 #include <iostream>

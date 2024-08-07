@@ -1,5 +1,5 @@
 #include "IndexBuffer.hpp"
-#include "Renderer.hpp"
+#include "OpenGLDebug.hpp"
 
 #include <glad/glad.h>
 

@@ -1,20 +1,5 @@
 #include "Renderer.hpp"
-#include <iostream>
-
-void Renderer::GLClearError()
-{
-    while(glGetError() != GL_NO_ERROR);
-}
-
-bool Renderer::GLLogCall(const char* function, const char* file, int line)
-{
-    if(GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error]: (" << error << "): " << function << " at " << file << ":" << line << '\n';
-        return false;
-    }
-    return true;
-}
+#include "OpenGLDebug.hpp"
 
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader)
 {

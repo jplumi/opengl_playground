@@ -1,6 +1,6 @@
 #include "VertexArray.hpp"
 
-#include "Renderer.hpp"
+#include "OpenGLDebug.hpp"
 #include "VertexBufferLayout.hpp"
 #include "glad/glad.h"
 #include <vector>

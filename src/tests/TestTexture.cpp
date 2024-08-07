@@ -1,5 +1,6 @@
 #include "TestTexture.hpp"
 
+#include "Application.hpp"
 #include "Assets.hpp"
 #include "IndexBuffer.hpp"
 #include "Renderer.hpp"
@@ -14,9 +15,10 @@ namespace test {
 TestTexture::TestTexture()
     : m_Translation(glm::vec3(0.0f)) 
 {
+    WindowSettings settings = Application::windowSettings;
     glm::mat4 projection = glm::ortho(
-        -g_WindowSettings.width / 2, g_WindowSettings.width / 2,
-        -g_WindowSettings.height / 2, g_WindowSettings.height / 2, -1.0f, 1.0f);
+        -settings.width / 2, settings.width / 2,
+        -settings.height / 2, settings.height / 2, -1.0f, 1.0f);
 
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
     

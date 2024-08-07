@@ -1,5 +1,5 @@
 #include "Texture.hpp"
-#include "Renderer.hpp"
+#include "OpenGLDebug.hpp"
 #include "Shader.hpp"
 
 Texture::Texture() {}

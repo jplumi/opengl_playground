@@ -1,7 +1,7 @@
 #include "Shader.hpp"
 
 #include <iostream>
-#include "Renderer.hpp"
+#include "OpenGLDebug.hpp"
 
 unsigned int Shader::m_LastBoundProgram = 0;
 

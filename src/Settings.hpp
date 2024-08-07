@@ -7,5 +7,3 @@ struct WindowSettings
     const char* title = "Game";
 };
 
-inline const WindowSettings g_WindowSettings;
-
