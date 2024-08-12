@@ -12,6 +12,15 @@
 
 namespace test {
 
+struct Vertex
+{
+    glm::vec2 position;
+    glm::vec2 texCoords;
+    glm::vec3 color;
+};
+
+static std::array<Vertex, 4> CreateQuad(float x, float y, glm::vec3 color, float size = 50.0f);
+
 TestTexture::TestTexture()
     : m_Translation(glm::vec3(0.0f)) 
 {
@@ -34,7 +43,7 @@ TestTexture::TestTexture()
 
     unsigned int indices[] = {0, 1, 3, 1, 2, 3};
 
-    auto quad1 = VertexArray::CreateQuad(-50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    auto quad1 = CreateQuad(-50.0f, 50.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
     Vertex vertices[4];
     memcpy(vertices, quad1.data(), quad1.size() * sizeof(Vertex));
@@ -76,5 +85,31 @@ void TestTexture::ImGuiRender()
     ImGui::SliderFloat2("Position", &m_Translation.x, -500.0f, 500.0f);
 }
 
+std::array<Vertex, 4> CreateQuad(float x, float y, glm::vec3 color, float size)
+{
+    Vertex v0;
+    v0.position = {x, y};
+    v0.texCoords = {0.0f, 0.0f};
+    v0.color = color;
+
+    Vertex v1;
+    v1.position = {x + size, y};
+    v1.texCoords = {1.0f, 0.0f};
+    v1.color = color;
+
+    Vertex v2;
+    v2.position = {x + size, y + size};
+    v2.texCoords = {1.0f, 1.0f};
+    v2.color = color;
+
+    Vertex v3;
+    v3.position = {x, y + size};
+    v3.texCoords = {0.0f, 1.0f};
+    v3.color = color;
+
+    return { v0, v1, v2, v3 };
 }
+
+}
+
 

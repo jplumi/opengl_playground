@@ -8,6 +8,13 @@
 
 namespace test {
 
+struct Vertex
+{
+    glm::vec2 position;
+    glm::vec2 texCoords;
+    glm::vec3 color;
+};
+
 class TestBatching : public Test
 {
 public:
@@ -17,12 +24,14 @@ public:
     void Render() override;
     void ImGuiRender() override;
 private:
-    glm::vec3 m_Translation;
     Shader* m_Shader;
     Texture* m_Texture;
     VertexArray* m_VAO;
     VertexBuffer* m_VBO;
     IndexBuffer* m_EBO;
+
+    glm::vec2 m_Position1;
+    glm::vec2 m_Position2;
 };
 
 }
