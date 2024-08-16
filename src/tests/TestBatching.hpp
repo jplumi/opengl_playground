@@ -31,7 +31,6 @@ private:
     IndexBuffer* m_EBO;
 
     glm::vec2 m_Position1;
-    glm::vec2 m_Position2;
 };
 
 }

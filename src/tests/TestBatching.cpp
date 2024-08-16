@@ -2,6 +2,7 @@
 
 #include "Assets.hpp"
 #include "IndexBuffer.hpp"
+#include "OpenGLDebug.hpp"
 #include "Renderer.hpp"
 #include "VertexArray.hpp"
 #include <cstring>
@@ -13,8 +14,7 @@
 
 namespace test {
 
-
-static std::array<Vertex, 4> CreateQuad(float x, float y, glm::vec3 color, float size = 50.0f);
+static Vertex* CreateQuad(Vertex* target, float x, float y, glm::vec3 color, float size = 50);
 
 TestBatching::TestBatching()
 {
@@ -35,14 +35,33 @@ TestBatching::TestBatching()
     m_Shader->SetMat4("u_View", view);
     m_Shader->SetMat4("u_Model", model);
 
-    unsigned int indices[] = {
-        0, 1, 3, 1, 2, 3,
-        4, 5, 7, 5, 6, 7 
-    };
+    const size_t maxQuadsCount = 1000;
+    const size_t maxVertexCount = maxQuadsCount * 4;
+    const size_t maxIndexCount = maxQuadsCount * 6;
+
+    // unsigned int indices[] = {
+    //     0, 1, 3, 1, 2, 3,
+    //     4, 5, 7, 5, 6, 7 
+    // };
+
+    unsigned int indices[maxIndexCount];
+    unsigned int offset = 0;
+    for(size_t i = 0; i < maxIndexCount; i += 6)
+    {
+        indices[i + 0] = 0 + offset;
+        indices[i + 1] = 1 + offset;
+        indices[i + 2] = 3 + offset;
+
+        indices[i + 3] = 1 + offset;
+        indices[i + 4] = 2 + offset;
+        indices[i + 5] = 3 + offset;
+
+        offset += 4;
+    }
 
     m_VAO = new VertexArray();
 
-    m_VBO = new VertexBuffer(nullptr, 1000 * sizeof(Vertex), GL_DYNAMIC_DRAW);
+    m_VBO = new VertexBuffer(nullptr, maxVertexCount * sizeof(Vertex), GL_DYNAMIC_DRAW);
     m_EBO = new IndexBuffer(indices, sizeof(indices));
 
     VertexBufferLayout vertexLayout;
@@ -63,53 +82,64 @@ TestBatching::~TestBatching()
 void TestBatching::Render()
 {
     m_Shader->Bind();
+    
+    std::array<Vertex, 108> vertices;
+    Vertex* buffer = vertices.data();
 
-    auto quad1 = CreateQuad(m_Position1.x, m_Position1.y, glm::vec3(1.0f, 1.0f, 1.0f));
-    auto quad2 = CreateQuad(m_Position2.x, m_Position2.y, glm::vec3(1.0f, 0.0f, 0.0f));
+    unsigned int indexCount = 0;
+    for(int y = 0; y < 5; y++)
+    {
+        for(int x = 0; x < 5; x++)
+        {
+            buffer = CreateQuad(buffer, x*50, y*50, glm::vec3((x + y) % 2));
+            indexCount += 6;
+        }
+    }
 
-    Vertex vertices[8];
-    memcpy(vertices, quad1.data(), quad1.size() * sizeof(Vertex));
-    memcpy(vertices + quad1.size(), quad2.data(), quad2.size() * sizeof(Vertex));
+    buffer = CreateQuad(buffer, m_Position1.x, m_Position1.y, glm::vec3(1.0f, 1.0f, 1.0f));
+    indexCount += 6;
+    buffer = CreateQuad(buffer, m_Position1.x + 100, m_Position1.y, glm::vec3(1.0f, 1.0f, 1.0f));
+    indexCount += 6;
+
+    m_VBO->Bind();
+    GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data()));
 
     m_VAO->Bind();
     m_EBO->Bind();
 
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, nullptr);
+    GLCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr));
 
     Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }
 
 void TestBatching::ImGuiRender()
 {
-    ImGui::SliderFloat2("Position 1", &m_Position1.x, -500.0f, 500.0f);
-    ImGui::SliderFloat2("Position 2", &m_Position2.x, -500.0f, 500.0f);
+    ImGui::SliderFloat2("Position", &m_Position1.x, -500.0f, 500.0f);
 }
 
-std::array<Vertex, 4> CreateQuad(float x, float y, glm::vec3 color, float size)
+Vertex* CreateQuad(Vertex* target, float x, float y, glm::vec3 color, float size)
 {
-    Vertex v0;
-    v0.position = {x, y};
-    v0.texCoords = {0.0f, 0.0f};
-    v0.color = color;
+    target->position = {x, y};
+    target->texCoords = {0.0f, 0.0f};
+    target->color = color;
+    target++;
 
-    Vertex v1;
-    v1.position = {x + size, y};
-    v1.texCoords = {1.0f, 0.0f};
-    v1.color = color;
+    target->position = {x + size, y};
+    target->texCoords = {1.0f, 0.0f};
+    target->color = color;
+    target++;
 
-    Vertex v2;
-    v2.position = {x + size, y + size};
-    v2.texCoords = {1.0f, 1.0f};
-    v2.color = color;
+    target->position = {x + size, y + size};
+    target->texCoords = {1.0f, 1.0f};
+    target->color = color;
+    target++;
 
-    Vertex v3;
-    v3.position = {x, y + size};
-    v3.texCoords = {0.0f, 1.0f};
-    v3.color = color;
+    target->position = {x, y + size};
+    target->texCoords = {0.0f, 1.0f};
+    target->color = color;
+    target++;
 
-    return { v0, v1, v2, v3 };
+    return target;
 }
 
 }
