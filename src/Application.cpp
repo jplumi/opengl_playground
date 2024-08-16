@@ -1,5 +1,7 @@
 #include "Application.hpp"
 
+#include "GLFW/glfw3.h"
+#include "InputManager.hpp"
 #include "OpenGLDebug.hpp"
 #include "Renderer.hpp"
 #include "imgui/imgui.h"
@@ -11,14 +13,6 @@
 #include "tests/TestMenu.hpp"
 #include "tests/TestTexture.hpp"
 #include <iostream>
-
-void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
-    }
-}
 
 const WindowSettings Application::windowSettings;
 GLFWwindow* Application::m_Window;
@@ -47,8 +41,6 @@ void Application::Init()
     }
     glfwMakeContextCurrent(m_Window);
 
-    glfwSetKeyCallback(m_Window, glfwKeyCallback);
-
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Error initializing glad\n";
@@ -68,6 +60,7 @@ void Application::Init()
     ImGui::StyleColorsDark();
 
     Assets::Init();
+    InputManager::Init(m_Window);
 }
 
 void Application::Run()
@@ -83,7 +76,11 @@ void Application::Run()
 
     while(!glfwWindowShouldClose(m_Window))
     {
-        glfwPollEvents();
+        InputManager::HandleInput();
+
+        if(InputManager::GetKey(GLFW_KEY_ESCAPE))
+            glfwSetWindowShouldClose(m_Window, true);
+
         Renderer::Clear();
 
         ImGui_ImplOpenGL3_NewFrame();
