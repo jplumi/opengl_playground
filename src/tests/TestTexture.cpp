@@ -29,7 +29,8 @@ TestTexture::TestTexture()
         -settings.width / 2, settings.width / 2,
         -settings.height / 2, settings.height / 2, -1.0f, 1.0f);
 
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    // glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    glm::mat4 view = Application::camera.GetViewMatrix();
     
     m_Shader = Assets::LoadShader("textureShader", "vert_Texture2D.glsl", "frag_Texture2D.glsl");
     m_Shader->Bind();
@@ -70,12 +71,11 @@ TestTexture::~TestTexture()
 
 void TestTexture::Render()
 {
-    // m_Texture->Bind();
-
     glm::mat4 model(1.0f);
     model = glm::translate(model, m_Translation);
     m_Shader->Bind();
     m_Shader->SetMat4("u_Model", model);
+    m_Shader->SetMat4("u_View", Application::camera.GetViewMatrix());
 
     Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }

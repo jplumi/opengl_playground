@@ -16,6 +16,7 @@
 
 const WindowSettings Application::windowSettings;
 GLFWwindow* Application::m_Window;
+Camera Application::camera;
 
 void Application::Init()
 {
@@ -65,7 +66,6 @@ void Application::Init()
 
 void Application::Run()
 {
-
     test::Test* currentTest = nullptr;
     test::TestMenu* testMenu = new test::TestMenu(currentTest);
     currentTest = testMenu;
@@ -74,12 +74,21 @@ void Application::Run()
     testMenu->RegisterTest<test::TestClearColor>("Clear color test");
     testMenu->RegisterTest<test::TestBatching>("Batching test");
 
+    float deltaTime = 0;
+    float lastFrameTime = 0;
+
     while(!glfwWindowShouldClose(m_Window))
     {
+        float currentTime = glfwGetTime();
+        deltaTime = currentTime - lastFrameTime;
+        lastFrameTime = currentTime;
+
         InputManager::HandleInput();
 
         if(InputManager::GetKey(GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(m_Window, true);
+        
+        camera.Update(deltaTime);
 
         Renderer::Clear();
 

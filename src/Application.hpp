@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Camera.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Settings.hpp"
@@ -12,6 +13,7 @@ public:
     static void Shutdown();
 
     static const WindowSettings windowSettings;
+    static Camera camera;
 
 private:
     static GLFWwindow* m_Window;

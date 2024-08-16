@@ -2,8 +2,6 @@
 
 #include "VertexBuffer.hpp"
 #include "VertexBufferLayout.hpp"
-#include "glm/glm.hpp"
-
 
 class VertexArray
 {
