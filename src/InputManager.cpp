@@ -1,11 +1,12 @@
 #include "InputManager.hpp"
-#include "GLFW/glfw3.h"
 
 bool InputManager::m_InputKeys[500];
+MouseScrollEvent InputManager::m_ScrollInput = { false, 0 };
 
 void InputManager::Init(GLFWwindow* window)
 {
     glfwSetKeyCallback(window, InputManager::GlfwKeyCallback);
+    glfwSetScrollCallback(window, InputManager::GlfwMouseScrollCallback);
 }
 
 void InputManager::HandleInput()
@@ -13,9 +14,11 @@ void InputManager::HandleInput()
     glfwPollEvents();
 }
 
-bool InputManager::GetKey(int keyCode)
+MouseScrollEvent InputManager::GetMouseScroll() 
 {
-    return m_InputKeys[keyCode];
+    MouseScrollEvent event = m_ScrollInput;
+    m_ScrollInput.scrolled = false;
+    return event;
 }
 
 void InputManager::GlfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -26,3 +29,8 @@ void InputManager::GlfwKeyCallback(GLFWwindow* window, int key, int scancode, in
         m_InputKeys[key] = false;
 }
 
+void InputManager::GlfwMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    m_ScrollInput.scrolled = true;
+    m_ScrollInput.amount = yoffset;
+}

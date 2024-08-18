@@ -16,7 +16,7 @@
 
 const WindowSettings Application::windowSettings;
 GLFWwindow* Application::m_Window;
-Camera Application::camera;
+Camera2D Application::camera;
 
 void Application::Init()
 {

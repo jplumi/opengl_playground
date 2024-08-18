@@ -9,7 +9,6 @@
 #include <glad/glad.h>
 #include "glm/fwd.hpp"
 #include "imgui/imgui.h"
-#include "Settings.hpp"
 #include "Application.hpp"
 
 namespace test {
@@ -18,20 +17,16 @@ static Vertex* CreateQuad(Vertex* target, float x, float y, glm::vec3 color, flo
 
 TestBatching::TestBatching()
 {
-    WindowSettings settings = Application::windowSettings;
-    glm::mat4 projection = glm::ortho(
-        -settings.width/2, settings.width/2,
-        -settings.height/2, settings.height/2, -1.0f, 1.0f);
-
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(0.0f));
 
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    Application::camera.position = glm::vec3(0);
+    glm::mat4 view = Application::camera.GetViewMatrix();
     
     m_Shader = Assets::LoadShader("baseShader", "vert_Base.glsl", "frag_Base.glsl");
     m_Shader->Bind();
     m_Shader->SetVec3("u_Color", 1.0f, 1.0f, 1.0f);
-    m_Shader->SetMat4("u_Projection", projection);
+    m_Shader->SetMat4("u_Projection", Application::camera.GetProjectionMatrix());
     m_Shader->SetMat4("u_View", view);
     m_Shader->SetMat4("u_Model", model);
 
@@ -82,6 +77,8 @@ TestBatching::~TestBatching()
 void TestBatching::Render()
 {
     m_Shader->Bind();
+    m_Shader->SetMat4("u_View", Application::camera.GetViewMatrix());
+    m_Shader->SetMat4("u_Projection", Application::camera.GetProjectionMatrix());
     
     std::array<Vertex, 108> vertices;
     Vertex* buffer = vertices.data();

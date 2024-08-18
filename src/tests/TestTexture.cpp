@@ -29,14 +29,14 @@ TestTexture::TestTexture()
         -settings.width / 2, settings.width / 2,
         -settings.height / 2, settings.height / 2, -1.0f, 1.0f);
 
-    // glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    Application::camera.position = glm::vec3(0);
     glm::mat4 view = Application::camera.GetViewMatrix();
     
     m_Shader = Assets::LoadShader("textureShader", "vert_Texture2D.glsl", "frag_Texture2D.glsl");
     m_Shader->Bind();
     m_Shader->SetVec3("u_Color", 1.0f, 1.0f, 1.0f);
     m_Shader->SetInt("u_Texture", 0);
-    m_Shader->SetMat4("u_Projection", projection);
+    m_Shader->SetMat4("u_Projection", Application::camera.GetProjectionMatrix());
     m_Shader->SetMat4("u_View", view);
 
     m_Texture = Assets::LoadTexture("images/player.png");
@@ -76,6 +76,7 @@ void TestTexture::Render()
     m_Shader->Bind();
     m_Shader->SetMat4("u_Model", model);
     m_Shader->SetMat4("u_View", Application::camera.GetViewMatrix());
+    m_Shader->SetMat4("u_Projection", Application::camera.GetProjectionMatrix());
 
     Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }
