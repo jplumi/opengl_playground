@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Renderer2D.hpp"
+
 namespace test {
 
 class Test
@@ -9,7 +11,7 @@ public:
     virtual ~Test() {}
 
     virtual void Update(float deltaTime) {}
-    virtual void Render() {}
+    virtual void Render(Renderer2D& renderer) {}
     virtual void ImGuiRender() {}
 };
 

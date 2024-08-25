@@ -21,7 +21,8 @@ public:
     TestBatching();
     ~TestBatching();
 
-    void Render() override;
+    void Update(float deltaTime) override;
+    void Render(Renderer2D& renderer) override;
     void ImGuiRender() override;
 private:
     Shader* m_Shader;

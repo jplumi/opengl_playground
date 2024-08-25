@@ -3,7 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "InputManager.hpp"
 #include "OpenGLDebug.hpp"
-#include "Renderer.hpp"
+#include "Renderer2D.hpp"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -17,6 +17,7 @@
 const WindowSettings Application::windowSettings;
 GLFWwindow* Application::m_Window;
 Camera2D Application::camera;
+Renderer2D* Application::renderer = nullptr;
 
 void Application::Init()
 {
@@ -62,6 +63,7 @@ void Application::Init()
 
     Assets::Init();
     InputManager::Init(m_Window);
+    renderer = new Renderer2D(camera);
 }
 
 void Application::Run()
@@ -87,18 +89,16 @@ void Application::Run()
 
         if(InputManager::GetKey(GLFW_KEY_ESCAPE))
             glfwSetWindowShouldClose(m_Window, true);
-        
-        camera.Update(deltaTime);
 
-        Renderer::Clear();
+        renderer->Clear();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         if(currentTest)
         {
-            currentTest->Update(0.0);
-            currentTest->Render();
+            currentTest->Update(deltaTime);
+            currentTest->Render(*renderer);
             ImGui::Begin("Test");
             if(currentTest != testMenu && ImGui::Button("<-"))
             {

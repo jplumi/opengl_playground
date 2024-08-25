@@ -5,19 +5,20 @@
 #include "tests/Test.hpp"
 
 namespace test {
-
-class TestTexture : public Test
+    
+class TestCollision : public Test
 {
 public:
-    TestTexture();
-    ~TestTexture();
+    TestCollision();
+    ~TestCollision();
 
+    void Update(float deltaTime) override;
     void Render(Renderer2D& renderer) override;
     void ImGuiRender() override;
 private:
-    glm::vec3 m_Translation;
-    Shader* m_Shader;
     Texture* m_Texture;
+    Shader* m_Shader;
 };
 
 }
+

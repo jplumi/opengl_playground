@@ -2,8 +2,8 @@
 
 #include "Assets.hpp"
 #include "IndexBuffer.hpp"
+#include "InputManager.hpp"
 #include "OpenGLDebug.hpp"
-#include "Renderer.hpp"
 #include "VertexArray.hpp"
 #include <cstring>
 #include <glad/glad.h>
@@ -33,11 +33,6 @@ TestBatching::TestBatching()
     const size_t maxQuadsCount = 1000;
     const size_t maxVertexCount = maxQuadsCount * 4;
     const size_t maxIndexCount = maxQuadsCount * 6;
-
-    // unsigned int indices[] = {
-    //     0, 1, 3, 1, 2, 3,
-    //     4, 5, 7, 5, 6, 7 
-    // };
 
     unsigned int indices[maxIndexCount];
     unsigned int offset = 0;
@@ -74,7 +69,34 @@ TestBatching::~TestBatching()
     delete m_EBO;
 }
 
-void TestBatching::Render()
+void TestBatching::Update(float deltaTime)
+{
+    float cameraSpeed = 120.0f;
+    Camera2D& cam = Application::camera;
+    if(InputManager::GetKey(GLFW_KEY_W))
+    {
+        cam.position.y += deltaTime * cameraSpeed;
+    }
+    if(InputManager::GetKey(GLFW_KEY_S))
+    {
+        cam.position.y -= deltaTime * cameraSpeed;
+    }
+    if(InputManager::GetKey(GLFW_KEY_A))
+    {
+        cam.position.x -= deltaTime * cameraSpeed;
+    }
+    if(InputManager::GetKey(GLFW_KEY_D))
+    {
+        cam.position.x += deltaTime * cameraSpeed;
+    }
+    MouseScrollEvent scrollEvent = InputManager::GetMouseScroll();
+    if(scrollEvent.scrolled)
+    {
+        cam.Zoom(scrollEvent.amount);
+    }
+}
+
+void TestBatching::Render(Renderer2D& renderer)
 {
     m_Shader->Bind();
     m_Shader->SetMat4("u_View", Application::camera.GetViewMatrix());
@@ -105,8 +127,6 @@ void TestBatching::Render()
     m_EBO->Bind();
 
     GLCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr));
-
-    Renderer::Draw(*m_VAO, *m_EBO, *m_Shader);
 }
 
 void TestBatching::ImGuiRender()
